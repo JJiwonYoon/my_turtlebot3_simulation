@@ -4,16 +4,20 @@
   <name>my_turtlebot3_simulation</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="wldnjs0488@gmail.com">oskar</maintainer>
+  <maintainer email="wldnjs0488@gmail.com">cwsfa</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
-  <depend>rclcpp</depend>
   <depend>turtlebot3_gazebo</depend>
   <depend>gazebo_ros_pkgs</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>
