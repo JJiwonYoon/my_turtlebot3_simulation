@@ -23,23 +23,25 @@ find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-add_executable(my_turtlebot3_simulation src/bot.cpp)
-ament_target_dependencies(my_turtlebot3_simulation rclcpp sensor_msgs nav_msgs std_msgs geometry_msgs)
+# Define executables with unique target names
+add_executable(bot_node src/bot.cpp)
+ament_target_dependencies(bot_node rclcpp sensor_msgs nav_msgs std_msgs geometry_msgs)
 
+add_executable(lidar_detection_node src/lidar_detection.cpp)
+ament_target_dependencies(lidar_detection_node rclcpp sensor_msgs nav_msgs std_msgs geometry_msgs)
+
+# Install targets
 install(TARGETS
-  my_turtlebot3_simulation
+  bot_node
+  lidar_detection_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
+# Add testing dependencies if testing is enabled
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+# Package setup
 ament_package()

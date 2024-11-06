@@ -13,8 +13,8 @@
 #include <cmath>
 #include <algorithm>
 
-const double k = 3.0;  // control gain
-const double L = 2.0;  // [m] Wheel base of vehicle
+const double k = 1.0;  // control gain
+const double L = 0.0;  // [m] Wheel base of vehicle
 const double v = 12;  // [m/s] Vehicle speed
 const double max_steer = M_PI / 6.0;  // [rad] max steering angle
 
@@ -23,14 +23,8 @@ class carlaSubscriber : public rclcpp::Node
 public:
     carlaSubscriber() : Node("stanley_main")
     {
-        carla_odometry = this->create_subscription<nav_msgs::msg::Odometry>(
-            "/carla/ego_vehicle/odometry", 10, std::bind(&carlaSubscriber::odom_callback, this, std::placeholders::_1));
-
-        carla_object_x = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "/avg_x", 10, std::bind(&carlaSubscriber::object_x_callback, this, std::placeholders::_1));
-
-        carla_object_y = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "/avg_y", 10, std::bind(&carlaSubscriber::object_y_callback, this, std::placeholders::_1));
+        bot_odometry = this->create_subscription<nav_msgs::msg::Odometry>(
+            "/odom", 10, std::bind(&carlaSubscriber::odom_callback, this, std::placeholders::_1));
 
         cmd_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
         odom_x = std::make_shared<double>(0.0);
@@ -200,14 +194,14 @@ private:
             std::cout << "Calculated steering angle (delta): " << delta << std::endl;
             std::cout << "Current target index: " << current_target_idx << std::endl;
             auto cmd_vel_msg = geometry_msgs::msg::Twist();
-            cmd_vel_msg.linear.x = 2.0;
+            cmd_vel_msg.linear.x = 0.1;
             cmd_vel_msg.angular.z = delta;
             cmd_publisher_->publish(cmd_vel_msg);
             std::this_thread::sleep_for(std::chrono::milliseconds(100)); // 100밀리초 대기
         }
     }
 
-    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr carla_odometry;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr bot_odometry;
     rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr carla_object_x;
     rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr carla_object_y;
     std::thread whileThread;
